@@ -1,0 +1,224 @@
+#:kivy 1.11.1
+
+WindowManager:
+
+    MainWindow:
+    EncryptionScreen:
+    DecryptionScreen:
+
+<MainWindow>:
+
+    name: 'MainWindow'
+
+    canvas.before:
+        Color:
+            rgba: 255/255, 249/255, 214/255, 1 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    FloatLayout:
+        Label:
+            text: 'Would you like\nto encrypt or\ndecrypt a file?'
+            size_hint: 1, .5
+            pos_hint: {'y': .5}
+            color: 130/255, 120/255, 98/255, 1
+            halign: "center"
+            font_size: 75
+            font_name: 'DoHyeon-Regular'
+            canvas.before:
+                Color:
+                    rgba: 218/255, 193/255, 151/255, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        Button:
+            text: 'Encrypt'
+            size_hint: .5, .5
+            pos_hint: {'x': .5}
+            font_size: 75
+            font_name: 'DoHyeon-Regular'
+            background_normal: ''
+            background_color: 166/255, 224/255, 185/255, 1
+            color: 130/255, 120/255, 98/255, 1
+            on_release: 
+                app.root.current = 'EncryptionScreen'
+                root.manager.transition.direction = 'left'
+        Button:
+            size_hint: .5, .5
+            text: 'Decrypt'  
+            font_size: 75
+            font_name: 'DoHyeon-Regular'
+            background_normal: ''
+            background_color: 166/255, 224/255, 185/255, 1
+            color: 130/255, 120/255, 98/255, 1
+            on_release: 
+                app.root.current = 'DecryptionScreen'
+                root.manager.transition.direction = 'right'
+
+<EncryptionScreen>:
+
+    removable: removable
+    name: 'EncryptionScreen'
+    namee: namee
+    key: key
+    newky: newky
+
+    canvas.before:
+        Color:
+            rgba: 255/255, 249/255, 214/255, 1 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    FloatLayout:
+
+        id: namee
+
+        Label:
+
+            id: key
+            
+            text: 'The private\nkey will be\n{},{}'.format(root.Privato_key, root.Modululo)
+            size_hint: 1, .4
+            pos_hint: {'y': .5}
+            color: 130/255, 120/255, 98/255, 1
+            halign: "center"
+            font_size: 75
+            font_name: 'DoHyeon-Regular'
+            canvas.before:
+                Color:
+                    rgba: 218/255, 193/255, 151/255, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        Button:
+            background_color: 0, 174/255, 168/255, 1
+            text: 'Back'
+            size_hint: .3, .1
+            font_size: 50
+            font_name: 'DoHyeon-Regular'
+            color: 0, 0, 0, .75
+            background_normal: ''
+            on_release: 
+                app.root.current = 'MainWindow'
+                root.manager.transition.direction = 'right'
+        Button:
+
+            id: removable
+
+            text: 'Select File'
+            on_release: root.show_load()
+            size_hint: .4, .1
+            font_size: 62
+            font_name: 'DoHyeon-Regular'
+            color: 0, 0, 0, .75
+            background_normal: ''
+            pos_hint: {'x': .3}
+            background_normal: ''
+            background_color: 196/255, 64/255, 101/55, .7
+        Label:
+            text: 'Encryption'
+            size_hint: 1, .1
+            pos_hint: {'y': .9}
+            color: 0, 0, 0, 1
+            halign: "center"
+            valign: 'bottom'
+            font_size: 125
+            font_name: 'DoHyeon-Regular'
+            canvas.before:
+                Color:
+                    rgba: 130/255, 185/255, 159/255, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        Button:
+
+            id: newky
+
+            text: 'New Key'
+            size_hint: .3, .1
+            font_size: 50
+            font_name: 'DoHyeon-Regular'
+            color: 0, 0, 0, .75
+            background_color: 0, 174/255, 168/255, 1
+            background_normal: ''
+            pos_hint: {'x': .7}
+            background_normal: ''
+            on_release: root.nw_kyst()
+
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserIconView:
+
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 75
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
+
+<DecryptionScreen>:
+
+    decryption: decryption.__self__
+    select: select.__self__
+    name: 'DecryptionScreen'
+
+    canvas.before:
+        Color:
+            rgba: 255/255, 249/255, 214/255, 1 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    FloatLayout:
+
+        id: decryption
+
+        Button:
+            background_color: 0, 174/255, 168/255, 1
+            text: 'Back'
+            size_hint: .3, .1
+            pos_hint: {'x': .7}
+            font_size: 62
+            font_name: 'DoHyeon-Regular'
+            color: 0, 0, 0, .75
+            background_normal: ''
+            on_release: 
+                app.root.current = 'MainWindow'
+                root.manager.transition.direction = 'left'
+        Button:
+
+            id: select
+            
+            text: 'Select File'
+            on_release: root.show_load()
+            size_hint: .7, .1
+            font_size: 75
+            font_name: 'DoHyeon-Regular'
+            color: 0, 0, 0, .75
+            background_normal: ''
+            background_normal: ''
+            background_color: 196/255, 64/255, 101/55, .7
+        Label:
+            text: 'Decryption'
+            size_hint: 1, .1
+            pos_hint: {'y': .9}
+            color: 0, 0, 0, 1
+            halign: "center"
+            valign: 'bottom'
+            font_size: 125
+            font_name: 'DoHyeon-Regular'
+            canvas.before:
+                Color:
+                    rgba: 130/255, 185/255, 159/255, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
