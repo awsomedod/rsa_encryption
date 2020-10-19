@@ -226,7 +226,7 @@ class FileSelector(GridLayout):
     pass
 
 
-kv = Builder.load_file('blacko.kv')
+kv = Builder.load_file('Kivy_file.kv')
 
 
 
