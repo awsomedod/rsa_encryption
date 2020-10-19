@@ -85,6 +85,8 @@ def GenerateKeys():
     Phi_Funcion = (Prime1 - 1) * (Prime2 - 1)
     Public_Key_Actual = gen_public_key(Modulus_Actual, Phi_Funcion)
     Private_Key_Actual = gen_private_key(Public_Key_Actual, Phi_Funcion)
+    if 1000 > Private_Key_Actual or Private_Key_Actual > 100000:
+         GenerateKeys()
 
 
 class MainWindow(Screen):
