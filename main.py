@@ -7,27 +7,35 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.gridlayout import GridLayout
 from kivy.graphics import Rectangle
 from kivy.graphics import Color
+from kivy.properties import StringProperty
 from random import randint
 from math import gcd
-from kivy.properties import StringProperty
+
 
 
 def Ascii(text):
+    """takes in text, a string, and returns a list where each item is
+    the ascii decimal value for each character in text"""
+
     new_text = []
-    for item in text:
-        new_text.append(ord(item))
+    for character in text:
+        new_text.append(ord(character))
     return new_text
 
 
-def Character(text):
-    import codecs
+def Character(numbers):
+    """takes in numbers, a list of numbers, and returns a list where each item is
+    the ascii charater for each value in numbers"""
+
     new_text = []
-    for item in text:
-        new_text.append(chr(item))
+    for number in numbers:
+        new_text.append(chr(number))
     return new_text
 
 
 def IsPrime(n):
+    """takes in n, an integer, and returns True if n is prime"""
+
     for i in range(2, n//2+1):
         if n%i == 0:
             return False
@@ -35,6 +43,9 @@ def IsPrime(n):
 
 
 def GenRandPrime(min, max):
+    """takes in min and max, 2 integers, and returns 2 random
+    prime integers less than max and greater than min"""
+    
     number = randint(min,max)
     if IsPrime(number):
         return number
@@ -43,10 +54,17 @@ def GenRandPrime(min, max):
 
 
 def CoPrime1(a, b):
+    """takes in a and b, 2 integers, and returns
+    whether true if they are Co-prime"""
+
     return gcd(a, b) == 1
 
 
 def CoPrime2(e, modulus, phifunction):
+    """takes in e, modulus, and phifunction, 3 integers, and 
+    returns true if e and modulus are Co-prime and if e and
+    phifunction are Co-prime"""
+
     if CoPrime1(e, modulus) and CoPrime1(e, phifunction):
         return True
     else:
@@ -54,6 +72,10 @@ def CoPrime2(e, modulus, phifunction):
 
 
 def gen_public_key(modulus, phifunction):
+    """takes in modulus and phifunction, 2 integers, and generates a
+    random integer e which is less than phifunction and is Co-prime
+    with modulus and phifunction"""
+
     e = randint (1, phifunction)
     if CoPrime2(e, modulus, phifunction):
         return e
@@ -62,20 +84,29 @@ def gen_public_key(modulus, phifunction):
 
 
 def gen_private_key(public_key, phifunction):
+    """takes in public_key and phifunction, 2 integers, and
+    returns private_key such that
+    (private_key*public_key)%phifunction == 1"""
+
     for i in range(phifunction * 100):
         if (i * public_key) % phifunction == 1:
-            d1 = i
-            break
-    random_factor = randint(1, 5)
-    private_key = d1 * ((phifunction * random_factor) + 1)
-    return private_key
+            random_factor = randint(1, 5)
+            private_key = i * ((phifunction * random_factor) + 1)
+            return private_key
 
 
-def Encrypt(message, public_key, modulus):
-    return (message ** public_key) % modulus
+def Encrypt(message, key, modulus):
+    """takes in message, key, and modulus, 3 integers,
+    and encrypts message using RSA encryption"""
+
+    return (message ** key) % modulus
 
 
 def GenerateKeys():
+    """generates a valid public key, private key, and modulus for
+    RSA encryption, the private key must be greater than 1000 and 
+    less than 100000 for performance"""
+
     global Public_Key_Actual
     global Private_Key_Actual
     global Modulus_Actual
@@ -101,14 +132,6 @@ class EncryptionScreen(Screen):
         self.Privato_key = Private_Key_Actual
         self.Publuco_key = Public_Key_Actual
         self.Modululo = Modulus_Actual
-
-
-    def nw_kys(self, instnace):
-        GenerateKeys()
-        self.Privato_key = Private_Key_Actual
-        self.Publuco_key = Public_Key_Actual
-        self.Modululo = Modulus_Actual
-        self.key.text = 'The private\nkey will be\n{},{}'.format(self.Privato_key, self.Modululo)
 
 
     def nw_kyst(self):
@@ -162,8 +185,8 @@ class DecryptionScreen(Screen):
     def private_key_ask(self):
         
         self.private_key = Label(text='What is\nthe private\nkey?',
-         color=[130/255, 120/255, 98/255, 1], size_hint=(1, .5), pos_hint={'y':.5},
-         font_name='DoHyeon-Regular', font_size=75, halign="center")
+         color=[130/255, 120/255, 98/255, 1], size_hint=(1, .5), pos_hint={'y':.45},
+         font_name='LemonMilk', font_size=50, halign="center")
 
         with self.private_key.canvas.before:
             Color(218/255, 193/255, 151/255, 1)
@@ -173,7 +196,7 @@ class DecryptionScreen(Screen):
         self.private_key_input = TextInput(multiline=False, size_hint=(1, .4), pos_hint={'y': .1})
 
         self.submit = Button(text='Submit', size_hint=(1, .1), 
-         font_name='DoHyeon-Regular', font_size=75, halign="center")
+         font_name='LemonMilk', font_size=65, halign="center")
         self.submit.bind(on_press=self.decrypt)
 
         self.decryption.add_widget(self.submit)
